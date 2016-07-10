@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConvertToUtf8.SimpleHelpers;
 
 namespace ConvertToUtf8
 {
@@ -34,7 +35,7 @@ namespace ConvertToUtf8
             Console.WriteLine("Converting done");
         }
 
-        public void BackupFile(string sourceFile)
+        private void BackupFile(string sourceFile)
         {
             var targetFile = Path.ChangeExtension(sourceFile, ".bk");
 
@@ -53,11 +54,18 @@ namespace ConvertToUtf8
             }
         }
 
-        public void ConvertFile(string pathToFile)
+        internal void ConvertFile(string pathToFile)
         {
             Console.WriteLine(Path.GetFileName(pathToFile));
             BackupFile(pathToFile);
-            var originalContent = File.ReadAllText(pathToFile, Encoding.Default);
+            var encoding = FileEncoding.DetectFileEncoding(pathToFile);
+            if (Equals(encoding, Encoding.UTF8))
+            {
+                Console.WriteLine($"Skipping {pathToFile}, it is already UTF8");
+                return;
+            }
+
+            var originalContent = File.ReadAllText(pathToFile, encoding);
             File.WriteAllText(pathToFile, originalContent, Encoding.UTF8);
         }
     }

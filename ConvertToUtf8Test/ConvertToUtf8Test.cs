@@ -11,19 +11,20 @@ namespace ConvertToUtf8Test
     {
         private readonly Convertor convertor = new Convertor();
         private readonly string testDirectory = "TestDirectory";
-        private readonly string testFile = "ExampleANSISubtitle.srt";
+        private const string TestFileAnsi = "ExampleANSISubtitle.srt";
+        private const string TestFileAlreadyUtf8 = "ExampleUTF8Subtitle.srt";
 
         [TestMethod]
         public void GetSrtFiles_ReturnsAllSubtitleFiles()
         {
-            var files = convertor.GetSrtFiles(testDirectory);
-            Assert.IsTrue(files.Count() == 1, $"Incorrect number of subtitles found. Expected 1. Returned {files.Count()}");
+            var files = convertor.GetSrtFiles(testDirectory).ToList();
+            Assert.IsTrue(files.Count == 2, $"Incorrect number of subtitles found. Expected 2. Returned {files.Count}");
         }
 
         [TestMethod]
         public void Convertor_ConvertsFiles()
         {
-            var testFolder = testDirectory + "_ConvertFileTest";
+            var testFolder = $"{testDirectory}_{Guid.NewGuid()}";
             SetupTest(testFolder);
 
             try
@@ -32,10 +33,10 @@ namespace ConvertToUtf8Test
             }
             catch (Exception ex)
             {
-                Assert.Fail($"Expected no exceptions during convert. Exception occured: {ex.Message} Stacktracek: {ex.StackTrace}");
+                Assert.Fail($"Expected no exceptions during convert. Exception occured: {ex.Message} Stacktrace: {ex.StackTrace}");
             }
 
-            string backupFilePath = testFolder + "\\" +  testFile;
+            string backupFilePath = testFolder + "\\" +  TestFileAnsi;
             backupFilePath = Path.ChangeExtension(backupFilePath, ".bk");
             Assert.IsTrue(File.Exists(backupFilePath), "Backup file was not created");
 
@@ -55,6 +56,18 @@ namespace ConvertToUtf8Test
                 File.Delete(file);
             }
             Directory.Delete(directoryPath, true);
+        }
+
+        [TestMethod()]
+        public void Convert_ConvertsFile()
+        {
+            var conv = new Convertor();
+
+            var testFolder = $"{testDirectory}_{Guid.NewGuid()}";
+            SetupTest(testFolder);
+
+            conv.ConvertFile($"{testFolder}\\{TestFileAnsi}");
+            DeleteDirectory(testFolder);
         }
     }
 }
