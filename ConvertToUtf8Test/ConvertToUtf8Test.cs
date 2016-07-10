@@ -61,12 +61,10 @@ namespace ConvertToUtf8Test
         [TestMethod()]
         public void Convert_ConvertsFile()
         {
-            var conv = new Convertor();
-
             var testFolder = $"{testDirectory}_{Guid.NewGuid()}";
             SetupTest(testFolder);
 
-            conv.ConvertFile($"{testFolder}\\{TestFileAnsi}");
+            convertor.ConvertFile($"{testFolder}\\{TestFileAnsi}");
             DeleteDirectory(testFolder);
         }
     }

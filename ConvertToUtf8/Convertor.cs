@@ -31,7 +31,15 @@ namespace ConvertToUtf8
             }
 
             Console.WriteLine($"Found {files.Count} .srt files. Converting them now.");
-            Parallel.ForEach(files, ConvertFile);
+            try
+            {
+                Parallel.ForEach(files, ConvertFile);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.Flatten();
+            }
+            
             Console.WriteLine("Converting done");
         }
 

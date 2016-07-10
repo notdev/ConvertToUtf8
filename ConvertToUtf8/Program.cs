@@ -22,7 +22,7 @@ namespace ConvertToUtf8
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error: {ex}");
             }
         }
 
@@ -37,8 +37,7 @@ namespace ConvertToUtf8
             var folderPath = args[0];
             if (!Directory.Exists(folderPath))
             {
-                throw new Exception(
-                    $"Directory '{folderPath}' does not exist or is not accessible. If it exists, make sure permissions allow read/write.");
+                throw new Exception($"Directory '{folderPath}' does not exist or is not accessible. If it exists, make sure permissions allow read/write.");
             }
             return folderPath;
         }
