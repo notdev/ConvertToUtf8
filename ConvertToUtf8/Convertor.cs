@@ -66,11 +66,15 @@ namespace ConvertToUtf8
         {
             Console.WriteLine(Path.GetFileName(pathToFile));
             BackupFile(pathToFile);
-            var encoding = FileEncoding.DetectFileEncoding(pathToFile);
+            var encoding = FileEncoding.DetectFileEncoding(pathToFile, Encoding.Default);
             if (Equals(encoding, Encoding.UTF8))
             {
                 Console.WriteLine($"Skipping {pathToFile}, it is already UTF8");
                 return;
+            }
+            if (encoding.WebName.Contains("Windows-1252"))
+            {
+                encoding = Encoding.Default;
             }
 
             var originalContent = File.ReadAllText(pathToFile, encoding);

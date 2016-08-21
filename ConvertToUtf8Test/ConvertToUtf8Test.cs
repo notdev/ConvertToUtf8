@@ -12,7 +12,6 @@ namespace ConvertToUtf8Test
         private readonly Convertor convertor = new Convertor();
         private readonly string testDirectory = "TestDirectory";
         private const string TestFileAnsi = "ExampleANSISubtitle.srt";
-        private const string TestFileAlreadyUtf8 = "ExampleUTF8Subtitle.srt";
 
         [TestMethod]
         public void GetSrtFiles_ReturnsAllSubtitleFiles()
